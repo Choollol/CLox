@@ -12,4 +12,5 @@ CMakeFiles/CLox.dir/src/chunk.c.obj: \
  C:/msys64/ucrt64/include/sdks/_mingw_ddk.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  C:/msys64/ucrt64/include/stdint.h \
+ C:/E/_VSCode_Projects/CLox/include/value.h \
  C:/E/_VSCode_Projects/CLox/include/memory.h

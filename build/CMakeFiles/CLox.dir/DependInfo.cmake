@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/E/_VSCode_Projects/CLox/src/chunk.c" "CMakeFiles/CLox.dir/src/chunk.c.obj" "gcc" "CMakeFiles/CLox.dir/src/chunk.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/debug.c" "CMakeFiles/CLox.dir/src/debug.c.obj" "gcc" "CMakeFiles/CLox.dir/src/debug.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/memory.c" "CMakeFiles/CLox.dir/src/memory.c.obj" "gcc" "CMakeFiles/CLox.dir/src/memory.c.obj.d"
+  "C:/E/_VSCode_Projects/CLox/src/value.c" "CMakeFiles/CLox.dir/src/value.c.obj" "gcc" "CMakeFiles/CLox.dir/src/value.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

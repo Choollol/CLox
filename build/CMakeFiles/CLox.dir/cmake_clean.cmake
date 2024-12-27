@@ -10,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/CLox.dir/src/debug.c.obj.d"
   "CMakeFiles/CLox.dir/src/memory.c.obj"
   "CMakeFiles/CLox.dir/src/memory.c.obj.d"
+  "CMakeFiles/CLox.dir/src/value.c.obj"
+  "CMakeFiles/CLox.dir/src/value.c.obj.d"
   "libCLox.dll.a"
 )
 

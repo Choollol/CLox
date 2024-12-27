@@ -1,0 +1,26 @@
+[
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/main.c.obj -c C:/E/_VSCode_Projects/CLox/main.c",
+  "file": "C:/E/_VSCode_Projects/CLox/main.c",
+  "output": "CMakeFiles/CLox.dir/main.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/chunk.c.obj -c C:/E/_VSCode_Projects/CLox/src/chunk.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/chunk.c",
+  "output": "CMakeFiles/CLox.dir/src/chunk.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/debug.c.obj -c C:/E/_VSCode_Projects/CLox/src/debug.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/debug.c",
+  "output": "CMakeFiles/CLox.dir/src/debug.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/memory.c.obj -c C:/E/_VSCode_Projects/CLox/src/memory.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/memory.c",
+  "output": "CMakeFiles/CLox.dir/src/memory.c.obj"
+}
+]

@@ -1,8 +1,11 @@
 #include "include/chunk.h"
 #include "include/common.h"
 #include "include/debug.h"
+#include "include/vm.h"
 
 int main() {
+    initVM();
+
     Chunk chunk;
     initChunk(&chunk);
 
@@ -14,6 +17,9 @@ int main() {
 
     disassembleChunk(&chunk, "test chunk");
 
+    interpret(&chunk);
+
+    freeVM();
     freeChunk(&chunk);
     return 0;
 }

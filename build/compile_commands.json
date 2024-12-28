@@ -28,5 +28,11 @@
   "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/value.c.obj -c C:/E/_VSCode_Projects/CLox/src/value.c",
   "file": "C:/E/_VSCode_Projects/CLox/src/value.c",
   "output": "CMakeFiles/CLox.dir/src/value.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/vm.c.obj -c C:/E/_VSCode_Projects/CLox/src/vm.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/vm.c",
+  "output": "CMakeFiles/CLox.dir/src/vm.c.obj"
 }
 ]

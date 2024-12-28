@@ -142,13 +142,28 @@ CMakeFiles/CLox.dir/src/value.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/CLox.dir/src/value.c.s"
 	C:/msys64/ucrt64/bin/gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:/E/_VSCode_Projects/CLox/src/value.c -o CMakeFiles/CLox.dir/src/value.c.s
 
+CMakeFiles/CLox.dir/src/vm.c.obj: CMakeFiles/CLox.dir/flags.make
+CMakeFiles/CLox.dir/src/vm.c.obj: C:/E/_VSCode_Projects/CLox/src/vm.c
+CMakeFiles/CLox.dir/src/vm.c.obj: CMakeFiles/CLox.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/E/_VSCode_Projects/CLox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/CLox.dir/src/vm.c.obj"
+	C:/msys64/ucrt64/bin/gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/CLox.dir/src/vm.c.obj -MF CMakeFiles/CLox.dir/src/vm.c.obj.d -o CMakeFiles/CLox.dir/src/vm.c.obj -c C:/E/_VSCode_Projects/CLox/src/vm.c
+
+CMakeFiles/CLox.dir/src/vm.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/CLox.dir/src/vm.c.i"
+	C:/msys64/ucrt64/bin/gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:/E/_VSCode_Projects/CLox/src/vm.c > CMakeFiles/CLox.dir/src/vm.c.i
+
+CMakeFiles/CLox.dir/src/vm.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/CLox.dir/src/vm.c.s"
+	C:/msys64/ucrt64/bin/gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:/E/_VSCode_Projects/CLox/src/vm.c -o CMakeFiles/CLox.dir/src/vm.c.s
+
 # Object files for target CLox
 CLox_OBJECTS = \
 "CMakeFiles/CLox.dir/main.c.obj" \
 "CMakeFiles/CLox.dir/src/chunk.c.obj" \
 "CMakeFiles/CLox.dir/src/debug.c.obj" \
 "CMakeFiles/CLox.dir/src/memory.c.obj" \
-"CMakeFiles/CLox.dir/src/value.c.obj"
+"CMakeFiles/CLox.dir/src/value.c.obj" \
+"CMakeFiles/CLox.dir/src/vm.c.obj"
 
 # External object files for target CLox
 CLox_EXTERNAL_OBJECTS =
@@ -158,10 +173,11 @@ CLox.exe: CMakeFiles/CLox.dir/src/chunk.c.obj
 CLox.exe: CMakeFiles/CLox.dir/src/debug.c.obj
 CLox.exe: CMakeFiles/CLox.dir/src/memory.c.obj
 CLox.exe: CMakeFiles/CLox.dir/src/value.c.obj
+CLox.exe: CMakeFiles/CLox.dir/src/vm.c.obj
 CLox.exe: CMakeFiles/CLox.dir/build.make
 CLox.exe: CMakeFiles/CLox.dir/linkLibs.rsp
 CLox.exe: CMakeFiles/CLox.dir/objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/E/_VSCode_Projects/CLox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable CLox.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/E/_VSCode_Projects/CLox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C executable CLox.exe"
 	"C:/Program Files/CMake/bin/cmake.exe" -E rm -f CMakeFiles/CLox.dir/objects.a
 	C:/msys64/ucrt64/bin/ar.exe qc CMakeFiles/CLox.dir/objects.a @CMakeFiles/CLox.dir/objects1.rsp
 	C:/msys64/ucrt64/bin/gcc.exe -g -Wl,--whole-archive CMakeFiles/CLox.dir/objects.a -Wl,--no-whole-archive -o CLox.exe -Wl,--out-implib,libCLox.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/CLox.dir/linkLibs.rsp

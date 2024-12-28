@@ -19,13 +19,13 @@ typedef enum {
     INTERPRET_RUNTIME_ERROR,
 } InterpretResult;
 
-/// @brief Initialize the global, static virtual machine.
+/// @brief Initialize the global virtual machine.
 void initVM();
-/// @brief Free the global, static virtual machine.
+/// @brief Free the global virtual machine.
 void freeVM();
 
-/// @brief Interprets a chunk of bytecode.
-InterpretResult interpret(Chunk* chunk);
+/// @brief Interprets a string of source code.
+InterpretResult interpret(const char* source);
 
 /// @brief Pushes a value onto the VM's stack.
 void push(Value value);

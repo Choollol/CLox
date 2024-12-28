@@ -1,8 +1,10 @@
 #include <stdio.h>
 
 #include "../include/common.h"
+#include "../include/compiler.h"
 #include "../include/debug.h"
 #include "../include/vm.h"
+
 
 VM vm;
 
@@ -20,13 +22,14 @@ void freeVM() {
 
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
-#define BINARY_OP(op) \
-    do { \
+#define BINARY_OP(op)     \
+    do {                  \
         double b = pop(); \
         double a = pop(); \
-        push(a op b); \
-    } while(false)
+        push(a op b);     \
+    } while (false)
 
+/// @brief Helper method to print the VM's current value stack.
 void printStack() {
     printf("          ");
     for (Value* slot = vm.stack; slot < vm.stackTop; ++slot) {
@@ -37,12 +40,12 @@ void printStack() {
     printf("\n");
 }
 
-/// @brief Executes instructions in a chunk.
+/// @brief Executes instructions in the VM.
 static InterpretResult run() {
     while (true) {
 #ifdef DEBUG_TRACE_EXECUTION
         printStack();
-        disassembleInstruction(vm.chunk, /* (int) */(vm.ip - vm.chunk->code));
+        disassembleInstruction(vm.chunk, /* (int) */ (vm.ip - vm.chunk->code));
 #endif
         uint8_t instruction;
         switch (instruction = READ_BYTE()) {
@@ -77,10 +80,9 @@ static InterpretResult run() {
 #undef READ_CONSTANT
 #undef BINARY_OP
 
-InterpretResult interpret(Chunk* chunk) {
-    vm.chunk = chunk;
-    vm.ip = chunk->code;
-    return run();
+InterpretResult interpret(const char* source) {
+    compile(source);
+    return INTERPRET_OK;
 }
 
 void push(Value value) {

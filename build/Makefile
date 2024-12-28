@@ -557,6 +557,30 @@ src/chunk.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/chunk.c.s
 .PHONY : src/chunk.c.s
 
+src/compiler.obj: src/compiler.c.obj
+.PHONY : src/compiler.obj
+
+# target to build an object file
+src/compiler.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/compiler.c.obj
+.PHONY : src/compiler.c.obj
+
+src/compiler.i: src/compiler.c.i
+.PHONY : src/compiler.i
+
+# target to preprocess a source file
+src/compiler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/compiler.c.i
+.PHONY : src/compiler.c.i
+
+src/compiler.s: src/compiler.c.s
+.PHONY : src/compiler.s
+
+# target to generate assembly for a file
+src/compiler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/compiler.c.s
+.PHONY : src/compiler.c.s
+
 src/debug.obj: src/debug.c.obj
 .PHONY : src/debug.obj
 
@@ -604,6 +628,30 @@ src/memory.s: src/memory.c.s
 src/memory.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/memory.c.s
 .PHONY : src/memory.c.s
+
+src/scanner.obj: src/scanner.c.obj
+.PHONY : src/scanner.obj
+
+# target to build an object file
+src/scanner.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/scanner.c.obj
+.PHONY : src/scanner.c.obj
+
+src/scanner.i: src/scanner.c.i
+.PHONY : src/scanner.i
+
+# target to preprocess a source file
+src/scanner.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/scanner.c.i
+.PHONY : src/scanner.c.i
+
+src/scanner.s: src/scanner.c.s
+.PHONY : src/scanner.s
+
+# target to generate assembly for a file
+src/scanner.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/scanner.c.s
+.PHONY : src/scanner.c.s
 
 src/value.obj: src/value.c.obj
 .PHONY : src/value.obj
@@ -697,12 +745,18 @@ help:
 	@echo "... src/chunk.obj"
 	@echo "... src/chunk.i"
 	@echo "... src/chunk.s"
+	@echo "... src/compiler.obj"
+	@echo "... src/compiler.i"
+	@echo "... src/compiler.s"
 	@echo "... src/debug.obj"
 	@echo "... src/debug.i"
 	@echo "... src/debug.s"
 	@echo "... src/memory.obj"
 	@echo "... src/memory.i"
 	@echo "... src/memory.s"
+	@echo "... src/scanner.obj"
+	@echo "... src/scanner.i"
+	@echo "... src/scanner.s"
 	@echo "... src/value.obj"
 	@echo "... src/value.i"
 	@echo "... src/value.s"

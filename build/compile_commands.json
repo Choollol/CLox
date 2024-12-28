@@ -13,6 +13,12 @@
 },
 {
   "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/compiler.c.obj -c C:/E/_VSCode_Projects/CLox/src/compiler.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/compiler.c",
+  "output": "CMakeFiles/CLox.dir/src/compiler.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
   "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/debug.c.obj -c C:/E/_VSCode_Projects/CLox/src/debug.c",
   "file": "C:/E/_VSCode_Projects/CLox/src/debug.c",
   "output": "CMakeFiles/CLox.dir/src/debug.c.obj"
@@ -22,6 +28,12 @@
   "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/memory.c.obj -c C:/E/_VSCode_Projects/CLox/src/memory.c",
   "file": "C:/E/_VSCode_Projects/CLox/src/memory.c",
   "output": "CMakeFiles/CLox.dir/src/memory.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/scanner.c.obj -c C:/E/_VSCode_Projects/CLox/src/scanner.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/scanner.c",
+  "output": "CMakeFiles/CLox.dir/src/scanner.c.obj"
 },
 {
   "directory": "C:/E/_VSCode_Projects/CLox/build",

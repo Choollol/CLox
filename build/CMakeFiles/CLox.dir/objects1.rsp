@@ -1,1 +1,1 @@
-CMakeFiles/CLox.dir/main.c.obj CMakeFiles/CLox.dir/src/chunk.c.obj CMakeFiles/CLox.dir/src/debug.c.obj CMakeFiles/CLox.dir/src/memory.c.obj CMakeFiles/CLox.dir/src/value.c.obj CMakeFiles/CLox.dir/src/vm.c.obj
+CMakeFiles/CLox.dir/main.c.obj CMakeFiles/CLox.dir/src/chunk.c.obj CMakeFiles/CLox.dir/src/compiler.c.obj CMakeFiles/CLox.dir/src/debug.c.obj CMakeFiles/CLox.dir/src/memory.c.obj CMakeFiles/CLox.dir/src/scanner.c.obj CMakeFiles/CLox.dir/src/value.c.obj CMakeFiles/CLox.dir/src/vm.c.obj

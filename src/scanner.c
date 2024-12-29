@@ -222,6 +222,9 @@ Token scanToken() {
     if (isdigit(c)) {
         return number();
     }
+    if (isCharValidIdFirst(c)) {
+        return identifier();
+    }
 
     switch (c) {
         // Single-character tokens

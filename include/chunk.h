@@ -6,12 +6,25 @@
 
 // Codes for different types of operations
 typedef enum {
+    // Constant
     OP_CONSTANT,
+    // Literals
+    OP_NIL,
+    OP_TRUE,
+    OP_FALSE,
+    // Boolean
+    OP_EQUAL,
+    OP_GREATER,
+    OP_LESS,
+    // Arithmetic
     OP_ADD,
     OP_SUBTRACT,
     OP_MULTIPLY,
     OP_DIVIDE,
+    // Unary
+    OP_NOT,
     OP_NEGATE,
+    // Return
     OP_RETURN,
 } OpCode;
 

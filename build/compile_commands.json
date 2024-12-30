@@ -31,6 +31,12 @@
 },
 {
   "directory": "C:/E/_VSCode_Projects/CLox/build",
+  "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/object.c.obj -c C:/E/_VSCode_Projects/CLox/src/object.c",
+  "file": "C:/E/_VSCode_Projects/CLox/src/object.c",
+  "output": "CMakeFiles/CLox.dir/src/object.c.obj"
+},
+{
+  "directory": "C:/E/_VSCode_Projects/CLox/build",
   "command": "C:/msys64/ucrt64/bin/gcc.exe   -g -o CMakeFiles/CLox.dir/src/scanner.c.obj -c C:/E/_VSCode_Projects/CLox/src/scanner.c",
   "file": "C:/E/_VSCode_Projects/CLox/src/scanner.c",
   "output": "CMakeFiles/CLox.dir/src/scanner.c.obj"

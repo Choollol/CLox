@@ -1,10 +1,17 @@
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "../include/common.h"
 #include "../include/compiler.h"
 #include "../include/debug.h"
+#include "../include/object.h"
+#include "../include/value.h"
+#include "../include/memory.h"
 #include "../include/vm.h"
+
+/// @returns Whether the top two values in the stack satisfy the given check macro/function.
+#define CHECK_TOP_TWO(check) (check(peek(0)) && check(peek(1)))
 
 VM vm;
 
@@ -29,9 +36,11 @@ static void runtimeError(const char* format, ...) {
 
 void initVM() {
     resetStack();
+    vm.objects = NULL;
 }
 
 void freeVM() {
+    freeObjects();
 }
 
 /// @returns The value at the distance from the top of the stack, 0 for the value at the top.
@@ -49,8 +58,26 @@ static bool isFalsey(Value value) {
     return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }
 
+/// @brief Concatenates the first-from-stack-top string onto the end of the second-from-stack-top string and pushes it back onto the stack.
+static void concatenate() {
+    ObjString* b = AS_STRING(pop());
+    ObjString* a = AS_STRING(pop());
+
+    int length = a->length + b->length;
+    char* chars = ALLOCATE(char, length + 1);
+    memcpy(chars, a->chars, a->length);
+    memcpy(chars + a->length, b->chars, b->length);
+    chars[length] = '\0';
+
+    ObjString* result = takeString(chars, length);
+    push(OBJ_VAL(result));
+}
+
+/// @brief Returns the current instruction byte and increments the VM's instruction pointer.
 #define READ_BYTE() (*vm.ip++)
+/// @brief Reads a byte and returns the constant associated with that byte.
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+/// @brief Performs a binary operation on the top two values in the stack and pushes the result back onto the stack.
 #define BINARY_OP(valueType, op)                          \
     do {                                                  \
         if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) { \
@@ -107,7 +134,16 @@ static InterpretResult run() {
                 BINARY_OP(BOOL_VAL, <);
                 break;
             case OP_ADD:
-                BINARY_OP(NUMBER_VAL, +);
+                if (CHECK_TOP_TWO(IS_STRING)) {
+                    concatenate();
+                }
+                else if (CHECK_TOP_TWO(IS_NUMBER)) {
+                    BINARY_OP(NUMBER_VAL, +);
+                }
+                else {
+                    runtimeError("Operands must be two numbers or strings.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
                 break;
             case OP_SUBTRACT:
                 BINARY_OP(NUMBER_VAL, -);

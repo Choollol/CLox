@@ -1,7 +1,7 @@
 #ifndef CLOX_INCLUDE_SCANNER_H
 #define CLOX_INCLUDE_SCANNER_H
 
-typedef enum {
+typedef enum TokenType {
     // Single-character tokens.
     TOKEN_LEFT_PAREN,
     TOKEN_RIGHT_PAREN,

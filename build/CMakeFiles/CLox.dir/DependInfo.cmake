@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/E/_VSCode_Projects/CLox/src/compiler.c" "CMakeFiles/CLox.dir/src/compiler.c.obj" "gcc" "CMakeFiles/CLox.dir/src/compiler.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/debug.c" "CMakeFiles/CLox.dir/src/debug.c.obj" "gcc" "CMakeFiles/CLox.dir/src/debug.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/memory.c" "CMakeFiles/CLox.dir/src/memory.c.obj" "gcc" "CMakeFiles/CLox.dir/src/memory.c.obj.d"
+  "C:/E/_VSCode_Projects/CLox/src/object.c" "CMakeFiles/CLox.dir/src/object.c.obj" "gcc" "CMakeFiles/CLox.dir/src/object.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/scanner.c" "CMakeFiles/CLox.dir/src/scanner.c.obj" "gcc" "CMakeFiles/CLox.dir/src/scanner.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/value.c" "CMakeFiles/CLox.dir/src/value.c.obj" "gcc" "CMakeFiles/CLox.dir/src/value.c.obj.d"
   "C:/E/_VSCode_Projects/CLox/src/vm.c" "CMakeFiles/CLox.dir/src/vm.c.obj" "gcc" "CMakeFiles/CLox.dir/src/vm.c.obj.d"

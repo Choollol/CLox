@@ -5,7 +5,7 @@
 #include "value.h"
 
 // Codes for different types of operations
-typedef enum {
+typedef enum OpCode {
     // Constant
     OP_CONSTANT,
     // Literals

@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+/// @brief Allocates new memory.
+#define ALLOCATE(type, count) ((type*)reallocate(NULL, 0, sizeof(type) * count))
+/// @brief Frees a pointer to the given type.
+#define FREE(type, pointer) (reallocate(pointer, sizeof(type), 0))
 /// @brief Calculate new capacity based on old capacity.
 #define GROW_CAPACITY(capacity) ((capacity < 8) ? 8 : capacity * 2)
 /// @brief Resizes a dynamic array by delegating to reallocate().
@@ -17,5 +21,8 @@
 /// @param newSize If 0, free allocation. Otherwise, resize.
 /// @return Pointer that points to the newly allocated block.
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+
+/// @brief Frees the VM's linked list of objects.
+void freeObjects();
 
 #endif

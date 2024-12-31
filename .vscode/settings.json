@@ -65,7 +65,10 @@
     "text_encoding": "cpp",
     "any": "cpp",
     "chunk.h": "c",
-    "memory.h": "c"
+    "memory.h": "c",
+    "value.h": "c",
+    "object.h": "c",
+    "stdlib.h": "c"
   },
   "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
   "clang-format.executable": "C:/msys64/usr/bin/clang-format.exe",

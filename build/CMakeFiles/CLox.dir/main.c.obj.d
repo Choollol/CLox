@@ -29,4 +29,5 @@ CMakeFiles/CLox.dir/main.c.obj: C:/E/_VSCode_Projects/CLox/main.c \
  C:/E/_VSCode_Projects/CLox/include/common.h \
  C:/E/_VSCode_Projects/CLox/include/debug.h \
  C:/E/_VSCode_Projects/CLox/include/chunk.h \
- C:/E/_VSCode_Projects/CLox/include/vm.h
+ C:/E/_VSCode_Projects/CLox/include/vm.h \
+ C:/E/_VSCode_Projects/CLox/include/table.h

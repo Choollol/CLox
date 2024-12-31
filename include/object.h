@@ -28,6 +28,7 @@ struct ObjString {
     Obj obj;
     int length;
     char* chars;
+    uint32_t hash;
 };
 
 /// @returns An ObjString* that takes ownership of the given chars.

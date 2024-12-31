@@ -677,6 +677,30 @@ src/scanner.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/scanner.c.s
 .PHONY : src/scanner.c.s
 
+src/table.obj: src/table.c.obj
+.PHONY : src/table.obj
+
+# target to build an object file
+src/table.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/table.c.obj
+.PHONY : src/table.c.obj
+
+src/table.i: src/table.c.i
+.PHONY : src/table.i
+
+# target to preprocess a source file
+src/table.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/table.c.i
+.PHONY : src/table.c.i
+
+src/table.s: src/table.c.s
+.PHONY : src/table.s
+
+# target to generate assembly for a file
+src/table.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CLox.dir/build.make CMakeFiles/CLox.dir/src/table.c.s
+.PHONY : src/table.c.s
+
 src/value.obj: src/value.c.obj
 .PHONY : src/value.obj
 
@@ -784,6 +808,9 @@ help:
 	@echo "... src/scanner.obj"
 	@echo "... src/scanner.i"
 	@echo "... src/scanner.s"
+	@echo "... src/table.obj"
+	@echo "... src/table.i"
+	@echo "... src/table.s"
 	@echo "... src/value.obj"
 	@echo "... src/value.i"
 	@echo "... src/value.s"

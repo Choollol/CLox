@@ -16,6 +16,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/CLox.dir/src/object.c.obj.d"
   "CMakeFiles/CLox.dir/src/scanner.c.obj"
   "CMakeFiles/CLox.dir/src/scanner.c.obj.d"
+  "CMakeFiles/CLox.dir/src/table.c.obj"
+  "CMakeFiles/CLox.dir/src/table.c.obj.d"
   "CMakeFiles/CLox.dir/src/value.c.obj"
   "CMakeFiles/CLox.dir/src/value.c.obj.d"
   "CMakeFiles/CLox.dir/src/vm.c.obj"

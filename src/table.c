@@ -59,7 +59,7 @@ bool tableGet(Table* table, ObjString* key, Value* out) {
     }
 
     Entry* entry = findEntry(table->entries, table->capacity, key);
-    if (entry == NULL) {
+    if (entry->key == NULL) {
         return false;
     }
     *out = entry->value;

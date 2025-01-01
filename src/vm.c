@@ -84,7 +84,7 @@ static void concatenate() {
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
 
 /// @brief Reads a constant and returns it as a string.
-#define READ_STRING() (AS_STRING(READ_CONSTANT()))
+#define READ_STRING() AS_STRING(READ_CONSTANT())
 /// @brief Performs a binary operation on the top two values in the stack and pushes the result back onto the stack.
 #define BINARY_OP(valueType, op)                          \
     do {                                                  \
@@ -139,14 +139,33 @@ static InterpretResult run() {
                 pop();
                 break;
             }
+            case OP_GET_LOCAL: {
+                uint8_t slot = READ_BYTE();
+                push(vm.stack[slot]);
+                break;
+            }
+            case OP_SET_LOCAL: {
+                uint8_t slot = READ_BYTE();
+                vm.stack[slot] = peek(0);
+                break;
+            }
             case OP_GET_GLOBAL: {
                 ObjString* name = READ_STRING();
                 Value value;
                 if (!tableGet(&vm.globals, name, &value)) {
-                    runtimeError("Undefined global variable.");
+                    runtimeError("Undefined global variable '%s'.", name->chars);
                     return INTERPRET_RUNTIME_ERROR;
                 }
                 push(value);
+                break;
+            }
+            case OP_SET_GLOBAL: {
+                ObjString* name = READ_STRING();
+                if (tableSet(&vm.globals, name, peek(0))) {
+                    tableDelete(&vm.globals, name);
+                    runtimeError("Undefined global variable '%s'.", name->chars);
+                    return INTERPRET_RUNTIME_ERROR;
+                }
                 break;
             }
             case OP_EQUAL:

@@ -10,9 +10,4 @@ void disassembleChunk(Chunk* chunk, const char* name);
 /// @returns Offset of the next instruction.
 int disassembleInstruction(Chunk* chunk, int offset);
 
-/// @brief Outputs a representation of a constant.
-int constantInstruction(const char* name, Chunk* chunk, int offset);
-/// @brief Outputs a representation of an instruction whose size is 1 byte.
-int simpleInstruction(const char* name, int offset);
-
 #endif

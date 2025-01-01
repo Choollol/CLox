@@ -14,4 +14,9 @@ CMakeFiles/CLox.dir/src/scanner.c.obj: \
  C:/msys64/ucrt64/include/stddef.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  C:/msys64/ucrt64/include/stdint.h \
- C:/E/_VSCode_Projects/CLox/include/scanner.h
+ C:/E/_VSCode_Projects/CLox/include/scanner.h \
+ C:/msys64/ucrt64/include/stdio.h \
+ C:/msys64/ucrt64/include/corecrt_stdio_config.h \
+ C:/msys64/ucrt64/include/_mingw_off_t.h \
+ C:/msys64/ucrt64/include/swprintf.inl \
+ C:/msys64/ucrt64/include/sec_api/stdio_s.h

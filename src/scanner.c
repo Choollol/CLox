@@ -4,6 +4,10 @@
 #include "../include/common.h"
 #include "../include/scanner.h"
 
+#ifdef DEBUG_PRINT
+#include <stdio.h>
+#endif
+
 typedef struct {
     const char* start;    // Beginning of current lexeme
     const char* current;  // Current character
@@ -90,7 +94,11 @@ void skipWhitespace() {
                     }
                 }
                 else if (peekNext() == '*') {
-                    while (!isAtEnd() && peek() != '*' && peekNext() != '/') {
+                    advance();
+                    while (!isAtEnd()) {
+                        if (match('*') && match('/')) {
+                            break;
+                        }
                         advance();
                     }
                 }

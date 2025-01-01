@@ -5,10 +5,11 @@
 #include "../include/common.h"
 #include "../include/compiler.h"
 #include "../include/debug.h"
+#include "../include/memory.h"
 #include "../include/object.h"
 #include "../include/value.h"
-#include "../include/memory.h"
 #include "../include/vm.h"
+
 
 /// @returns Whether the top two values in the stack satisfy the given check macro/function.
 #define CHECK_TOP_TWO(check) (check(peek(0)) && check(peek(1)))
@@ -38,10 +39,12 @@ void initVM() {
     resetStack();
     vm.objects = NULL;
     initTable(&vm.strings);
+    initTable(&vm.globals);
 }
 
 void freeVM() {
     freeTable(&vm.strings);
+    freeTable(&vm.globals);
     freeObjects();
 }
 
@@ -75,10 +78,13 @@ static void concatenate() {
     push(OBJ_VAL(result));
 }
 
-/// @brief Returns the current instruction byte and increments the VM's instruction pointer.
+/// @returns The current instruction byte and increments the VM's instruction pointer.
 #define READ_BYTE() (*vm.ip++)
 /// @brief Reads a byte and returns the constant associated with that byte.
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+
+/// @brief Reads a constant and returns it as a string.
+#define READ_STRING() (AS_STRING(READ_CONSTANT()))
 /// @brief Performs a binary operation on the top two values in the stack and pushes the result back onto the stack.
 #define BINARY_OP(valueType, op)                          \
     do {                                                  \
@@ -127,6 +133,22 @@ static InterpretResult run() {
             case OP_POP:
                 pop();
                 break;
+            case OP_DEFINE_GLOBAL: {
+                ObjString* name = READ_STRING();
+                tableSet(&vm.globals, name, peek(0));
+                pop();
+                break;
+            }
+            case OP_GET_GLOBAL: {
+                ObjString* name = READ_STRING();
+                Value value;
+                if (!tableGet(&vm.globals, name, &value)) {
+                    runtimeError("Undefined global variable.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                push(value);
+                break;
+            }
             case OP_EQUAL:
                 Value b = pop();
                 Value a = pop();
@@ -182,6 +204,7 @@ static InterpretResult run() {
 
 #undef READ_BYTE
 #undef READ_CONSTANT
+#undef READ_STRING
 #undef BINARY_OP
 
 InterpretResult interpret(const char* source) {

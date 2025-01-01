@@ -6,7 +6,6 @@
 #include "../include/object.h"
 #include "../include/scanner.h"
 
-
 #ifdef DEBUG_PRINT_CODE
 #include "../include/debug.h"
 #endif
@@ -161,6 +160,22 @@ static void declaration();
 /// @brief Parses a statement.
 static void statement();
 
+/// @brief Puts an identifier into the VM's constant table.
+/// @returns The index of the constant in the constant table.
+static uint8_t identifierConstant(Token* name) {
+    return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+}
+/// @brief Parses a variable identifier and creates a constant for the name.
+/// @returns The index of the variable's identifier in the constant table.
+static uint8_t parseVariable(const char* errorMessage) {
+    consume(TOKEN_IDENTIFIER, errorMessage);
+    return identifierConstant(&parser.previous);
+}
+/// @brief Parses a global variable definition.
+static void defineVariable(uint8_t global) {
+    emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
 /// @brief Parses a binary expression.
 static void binary() {
     TokenType operatorType = parser.previous.type;
@@ -236,6 +251,17 @@ static void string() {
     emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
 }
 
+/// @brief Parses the use of a named variable.
+static void namedVariable(Token name) {
+    uint8_t arg = identifierConstant(&name);
+    emitBytes(OP_GET_GLOBAL, arg);
+}
+
+/// @brief Parses the use of a variable.
+static void variable() {
+    namedVariable(parser.previous);
+}
+
 /// @brief Parses a unary expression.
 static void unary() {
     TokenType operatorType = parser.previous.type;
@@ -275,7 +301,7 @@ ParseRule rules[] = {
     [TOKEN_GREATER_EQUAL] = {NULL, binary, PREC_COMPARISON},
     [TOKEN_LESS] = {NULL, binary, PREC_COMPARISON},
     [TOKEN_LESS_EQUAL] = {NULL, binary, PREC_COMPARISON},
-    [TOKEN_IDENTIFIER] = {NULL, NULL, PREC_NONE},
+    [TOKEN_IDENTIFIER] = {variable, NULL, PREC_NONE},
     [TOKEN_STRING] = {string, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {number, NULL, PREC_NONE},
     [TOKEN_AND] = {NULL, NULL, PREC_NONE},
@@ -302,17 +328,35 @@ static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
 }
 
+/// @brief Parses a variable declaration. Assumes the var token has already been consumed.
+static void varDeclaration() {
+    uint8_t global = parseVariable("Expect variable name.");
+
+    if (match(TOKEN_EQUAL)) {
+        expression();
+    }
+    else {
+        emitByte(OP_NIL);
+    }
+
+    consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration.");
+    defineVariable(global);
+}
+
+/// @brief Parses an expression statement.
 static void expressionStatement() {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after expression statement.");
     emitByte(OP_POP);
 }
+/// @brief Parses a print statement. Assumes the print token has already been consumed.
 static void printStatement() {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after print statement.");
     emitByte(OP_PRINT);
 }
 
+/// @brief Recover the parser after entering panic mode.
 static void synchronize() {
     while (!check(TOKEN_EOF)) {
         if (parser.previous.type == TOKEN_SEMICOLON) {
@@ -334,7 +378,12 @@ static void synchronize() {
 }
 
 static void declaration() {
-    statement();
+    if (match(TOKEN_VAR)) {
+        varDeclaration();
+    }
+    else {
+        statement();
+    }
 
     if (parser.panicMode) {
         synchronize();

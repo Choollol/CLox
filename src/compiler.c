@@ -3,8 +3,9 @@
 
 #include "../include/common.h"
 #include "../include/compiler.h"
-#include "../include/scanner.h"
 #include "../include/object.h"
+#include "../include/scanner.h"
+
 
 #ifdef DEBUG_PRINT_CODE
 #include "../include/debug.h"
@@ -73,6 +74,10 @@ static void error(const char* message) {
 static void errorAtCurrent(const char* message) {
     errorAt(&parser.current, message);
 }
+/// @returns Whether the parser's current token's type is equal to the given type.
+static bool check(TokenType type) {
+    return parser.current.type == type;
+}
 
 /// @brief Advances to the next token.
 static void advance() {
@@ -90,11 +95,19 @@ static void advance() {
 }
 /// @brief If the current token matches the given type, advance. Otherwise, report an error.
 static void consume(TokenType type, const char* message) {
-    if (parser.current.type == type) {
+    if (check(type)) {
         advance();
         return;
     }
     errorAtCurrent(message);
+}
+/// @brief If the parser's current token's type matches the given type, advances and return true. Otherwise, do nothing and return false.
+static bool match(TokenType type) {
+    if (check(type)) {
+        advance();
+        return true;
+    }
+    return false;
 }
 
 /// @brief Appends a single byte to the current chunk.
@@ -137,12 +150,16 @@ static void endCompiler() {
 #endif
 }
 
+/// @returns A pointer to the ParseRule corresponding to the given TokenType.
+static ParseRule* getRule(TokenType type);
 /// @brief Parses the expressions at the parser's current token that are equal to or higher than the given precedence.
 static void parsePrecedence(Precedence precedence);
 /// @brief Parses an expression.
 static void expression();
-/// @returns A pointer to the ParseRule corresponding to the given TokenType.
-static ParseRule* getRule(TokenType type);
+/// @brief Parses a declaration statement.
+static void declaration();
+/// @brief Parses a statement.
+static void statement();
 
 /// @brief Parses a binary expression.
 static void binary() {
@@ -285,6 +302,53 @@ static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
 }
 
+static void expressionStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after expression statement.");
+    emitByte(OP_POP);
+}
+static void printStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after print statement.");
+    emitByte(OP_PRINT);
+}
+
+static void synchronize() {
+    while (!check(TOKEN_EOF)) {
+        if (parser.previous.type == TOKEN_SEMICOLON) {
+            return;
+        }
+        switch (parser.current.type) {
+            case TOKEN_CLASS:
+            case TOKEN_FUN:
+            case TOKEN_VAR:
+            case TOKEN_FOR:
+            case TOKEN_IF:
+            case TOKEN_WHILE:
+            case TOKEN_PRINT:
+            case TOKEN_RETURN:
+                return;
+        }
+        advance();
+    }
+}
+
+static void declaration() {
+    statement();
+
+    if (parser.panicMode) {
+        synchronize();
+    }
+}
+static void statement() {
+    if (match(TOKEN_PRINT)) {
+        printStatement();
+    }
+    else {
+        expressionStatement();
+    }
+}
+
 static void parsePrecedence(Precedence precedence) {
     advance();
     ParseFn prefixRule = getRule(parser.previous.type)->prefix;
@@ -314,7 +378,11 @@ bool compile(const char* source, Chunk* chunk) {
     parser.panicMode = false;
 
     advance();
-    expression();
+
+    while (!match(TOKEN_EOF)) {
+        declaration();
+    }
+
     consume(TOKEN_EOF, "Expect end of expression");
 
     endCompiler();

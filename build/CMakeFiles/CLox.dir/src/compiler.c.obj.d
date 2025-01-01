@@ -29,5 +29,5 @@ CMakeFiles/CLox.dir/src/compiler.c.obj: \
  C:/E/_VSCode_Projects/CLox/include/chunk.h \
  C:/E/_VSCode_Projects/CLox/include/common.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
- C:/E/_VSCode_Projects/CLox/include/scanner.h \
- C:/E/_VSCode_Projects/CLox/include/object.h
+ C:/E/_VSCode_Projects/CLox/include/object.h \
+ C:/E/_VSCode_Projects/CLox/include/scanner.h

@@ -131,12 +131,22 @@ static void emitBytes(uint8_t byte1, uint8_t byte2) {
     emitByte(byte1);
     emitByte(byte2);
 }
+/// @brief Emits an instruction to jump back to the given offset.
+static int emitLoop(int loopStart) {
+    emitByte(OP_LOOP);
+
+    int offset = currentChunk()->count - loopStart + 2;
+    if (offset > UINT16_MAX) {
+        error("Loop body too large.");
+    }
+
+    emitBytes((offset >> 8) & 0xff, offset & 0xff);
+}
 /// @brief Emits a placeholder 16-bit jump-offset operand.
 /// @returns Chunk offset of the emitted instruction.
 static int emitJump(uint8_t instruction) {
     emitByte(instruction);
-    emitByte(0xff);
-    emitByte(0xff);
+    emitBytes(0xff, 0xff);
     return currentChunk()->count - 2;
 }
 /// @brief Appends a return instruction to the current chunk.
@@ -547,6 +557,22 @@ static void printStatement() {
     consume(TOKEN_SEMICOLON, "Expect ';' after print statement.");
     emitByte(OP_PRINT);
 }
+/// @brief Parses a while loop.
+static void whileStatement() {
+    int loopStart = currentChunk()->count;
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'while'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after while condition.");
+
+    int exitJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+
+    statement();
+    emitLoop(loopStart);
+
+    patchJump(exitJump);
+    emitByte(OP_POP);
+}
 
 /// @brief Recover the parser after entering panic mode.
 static void synchronize() {
@@ -589,6 +615,9 @@ static void statement() {
     }
     else if (match(TOKEN_IF)) {
         ifStatement();
+    }
+    else if (match(TOKEN_WHILE)) {
+        whileStatement();
     }
     else if (match(TOKEN_LEFT_BRACE)) {
         beginScope();

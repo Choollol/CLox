@@ -573,6 +573,57 @@ static void whileStatement() {
     patchJump(exitJump);
     emitByte(OP_POP);
 }
+/// @brief Parses a for loop.
+static void forStatement() {
+    beginScope();
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
+
+    // Initializer
+    if (match(TOKEN_SEMICOLON)) {
+        // No initializer
+    }
+    else if (match(TOKEN_VAR)) {
+        varDeclaration();
+    }
+    else {
+        expressionStatement();
+    }
+
+    int loopStart = currentChunk()->count;
+
+    // Condition
+    int exitJump = -1;
+    if (!match(TOKEN_SEMICOLON)) {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after for condition.");
+
+        exitJump = emitJump(OP_JUMP_IF_FALSE);
+        emitByte(OP_POP);
+    }
+
+    // Increment
+    if (!match(TOKEN_RIGHT_PAREN)) {
+        int bodyJump = emitJump(OP_JUMP);
+        int incrementStart = currentChunk()->count;
+
+        expression();
+        emitByte(OP_POP);
+
+        consume(TOKEN_RIGHT_PAREN, "Expect ')' after for clauses.");
+
+        emitLoop(loopStart);
+        loopStart = incrementStart;
+        patchJump(bodyJump);
+    }
+
+    statement();
+    emitLoop(loopStart);
+    if (exitJump != -1) {
+        patchJump(exitJump);
+        emitByte(OP_POP);
+    }
+    endScope();
+}
 
 /// @brief Recover the parser after entering panic mode.
 static void synchronize() {
@@ -618,6 +669,9 @@ static void statement() {
     }
     else if (match(TOKEN_WHILE)) {
         whileStatement();
+    }
+    else if (match(TOKEN_FOR)) {
+        forStatement();
     }
     else if (match(TOKEN_LEFT_BRACE)) {
         beginScope();

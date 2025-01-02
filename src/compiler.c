@@ -45,19 +45,26 @@ typedef struct {
     int depth;
 } Local;
 
+typedef enum FunctionType {
+    TYPE_FUNCTION,
+    TYPE_SCRIPT,
+} FunctionType;
+
 typedef struct {
+    ObjFunction* function;
+    FunctionType type;
+
     Local locals[UINT8_COUNT];
     int localCount;
     int scopeDepth;
 } Compiler;
 
 Parser parser;
-Compiler* current;
-Chunk* compilingChunk;
+Compiler* current = NULL;
 
 /// @returns The chunk that is currently being compiled.
 static Chunk* currentChunk() {
-    return compilingChunk;
+    return &current->function->chunk;
 }
 
 /// @brief Reports an error at the given token.
@@ -184,20 +191,32 @@ static void patchJump(int offset) {
 }
 
 /// @brief Initializes the compiler.
-static void initCompiler(Compiler* compiler) {
+static void initCompiler(Compiler* compiler, FunctionType type) {
+    compiler->function = NULL;
+    compiler->type = type;
     compiler->localCount = 0;
     compiler->scopeDepth = 0;
+    compiler->function = newFunction();
     current = compiler;
+
+    Local* local = &current->locals[current->localCount++];
+    local->depth = 0;
+    local->name.start = "";
+    local->name.length = 0;
 }
 
 /// @brief Ends compilation.
-static void endCompiler() {
+static ObjFunction* endCompiler() {
     emitReturn();
+    ObjFunction* function = current->function;
+
 #ifdef DEBUG_PRINT_CODE
     if (!parser.hadError) {
-        disassembleChunk(currentChunk(), "code");
+        disassembleChunk(currentChunk(), function->name != NULL ? function->name->chars : "<script>");
     }
 #endif
+
+    return function;
 }
 
 /// @brief Begins a new scope by incrementing the current compiler's scope depth.
@@ -709,13 +728,11 @@ static ParseRule* getRule(TokenType type) {
     return &rules[type];
 }
 
-bool compile(const char* source, Chunk* chunk) {
+ObjFunction* compile(const char* source) {
     initScanner(source);
 
     Compiler compiler;
-    initCompiler(&compiler);
-
-    compilingChunk = chunk;
+    initCompiler(&compiler, TYPE_SCRIPT);
 
     parser.hadError = false;
     parser.panicMode = false;
@@ -728,7 +745,7 @@ bool compile(const char* source, Chunk* chunk) {
 
     consume(TOKEN_EOF, "Expect end of expression");
 
-    endCompiler();
+    ObjFunction* function = endCompiler();
 
-    return !parser.hadError;
+    return parser.hadError ? NULL : function;
 }

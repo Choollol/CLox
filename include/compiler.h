@@ -4,7 +4,7 @@
 #include "chunk.h"
 
 /// @brief Compiles source code.
-/// @returns Bool reporting the compilation's success status.
-bool compile(const char* source, Chunk* chunk);
+/// @returns The compiler's current function. If a compile-time error occurred, returns NULL.
+ObjFunction* compile(const char* source);
 
 #endif

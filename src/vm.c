@@ -83,6 +83,8 @@ static void concatenate() {
 /// @brief Reads a byte and returns the constant associated with that byte.
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
 
+/// @brief Reads two originally shifted bytes into a short.
+#define READ_SHORT() (vm.ip += 2, (uint16_t)((vm.ip[-2] << 8) | vm.ip[-1]))
 /// @brief Reads a constant and returns it as a string.
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 /// @brief Performs a binary operation on the top two values in the stack and pushes the result back onto the stack.
@@ -214,6 +216,18 @@ static InterpretResult run() {
                 printValue(pop());
                 printf("\n");
                 break;
+            case OP_JUMP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip += offset;
+                break;
+            }
+            case OP_JUMP_IF_FALSE: {
+                uint16_t offset = READ_SHORT();
+                if (isFalsey(peek(0))) {
+                    vm.ip += offset;
+                }
+                break;
+            }
             case OP_RETURN:
                 // Exit interpreter
                 return INTERPRET_OK;
@@ -223,6 +237,7 @@ static InterpretResult run() {
 
 #undef READ_BYTE
 #undef READ_CONSTANT
+#undef READ_SHORT
 #undef READ_STRING
 #undef BINARY_OP
 

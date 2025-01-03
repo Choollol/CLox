@@ -23,6 +23,7 @@ CMakeFiles/CLox.dir/src/table.c.obj: \
  C:/msys64/ucrt64/include/stdint.h \
  C:/E/_VSCode_Projects/CLox/include/object.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
+ C:/E/_VSCode_Projects/CLox/include/chunk.h \
  C:/E/_VSCode_Projects/CLox/include/table.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
  C:/msys64/ucrt64/include/stdio.h \

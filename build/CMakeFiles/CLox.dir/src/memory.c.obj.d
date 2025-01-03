@@ -22,6 +22,7 @@ CMakeFiles/CLox.dir/src/memory.c.obj: \
  C:/msys64/ucrt64/include/stdint.h \
  C:/E/_VSCode_Projects/CLox/include/object.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
- C:/E/_VSCode_Projects/CLox/include/vm.h \
  C:/E/_VSCode_Projects/CLox/include/chunk.h \
- C:/E/_VSCode_Projects/CLox/include/table.h
+ C:/E/_VSCode_Projects/CLox/include/vm.h \
+ C:/E/_VSCode_Projects/CLox/include/table.h \
+ C:/E/_VSCode_Projects/CLox/include/object.h

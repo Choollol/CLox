@@ -20,4 +20,5 @@ CMakeFiles/CLox.dir/src/value.c.obj: \
  C:/msys64/ucrt64/include/stdint.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
  C:/E/_VSCode_Projects/CLox/include/object.h \
- C:/E/_VSCode_Projects/CLox/include/value.h
+ C:/E/_VSCode_Projects/CLox/include/value.h \
+ C:/E/_VSCode_Projects/CLox/include/chunk.h

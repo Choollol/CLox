@@ -3,6 +3,7 @@
 #include "../include/debug.h"
 #include "../include/value.h"
 
+/// @brief Outputs a representation of a constant instruction and its corresponding value.
 static int constantInstruction(const char* name, Chunk* chunk, int offset) {
     int constantIndex = chunk->code[offset];
     printf("%-16s %4d '", name, constantIndex);
@@ -10,15 +11,18 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
     printf("'\n");
     return offset + 2;
 }
+/// @brief Outputs a representation of a simple, one-byte instruction.
 static int simpleInstruction(const char* name, int offset) {
     printf("%s\n", name);
     return offset + 1;
 }
+/// @brief Outputs a representation of a local-variable instruction.
 static int byteInstruction(const char* name, Chunk* chunk, int offset) {
     uint8_t slot = chunk->code[offset + 1];
     printf("%-16s %4d\n", name, slot);
     return offset + 2;
 }
+/// @brief Outputs a representation of an instruction that causes an instruction-pointer jump.
 static int jumpInstruction(const char* name, int sign, Chunk* chunk, int offset) {
     uint16_t jump = (uint16_t)(chunk->code[offset + 1] << 8) | chunk->code[offset + 2];
 
@@ -95,6 +99,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return jumpInstruction("OP_JUMP_IF_FALSE", 1, chunk, offset);
         case OP_LOOP:
             return jumpInstruction("OP_LOOP", -1, chunk, offset);
+        case OP_CALL:
+            return byteInstruction("OP_CALL", chunk, offset);
         case OP_RETURN:
             return simpleInstruction("OP_RETURN", offset);
         default:

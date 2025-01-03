@@ -10,7 +10,6 @@
 #include "../include/value.h"
 #include "../include/vm.h"
 
-
 /// @returns Whether the top two values in the stack satisfy the given check macro/function.
 #define CHECK_TOP_TWO(check) (check(peek(0)) && check(peek(1)))
 
@@ -30,10 +29,20 @@ static void runtimeError(const char* format, ...) {
     va_end(args);
     fputs("\n", stderr);
 
-    CallFrame* frame = &vm.frames[vm.frameCount - 1];
-    size_t instruction = frame->ip - frame->function->chunk.code - 1;
-    int line = frame->function->chunk.lines[instruction];
-    fprintf(stderr, "[line %d] in script\n", line);
+    for (int i = vm.frameCount - 1; i >= 0; --i) {
+        CallFrame* frame = &vm.frames[i];
+        ObjFunction* function = frame->function;
+        size_t instruction = frame->ip - function->chunk.code - 1;
+        fprintf(stderr, "[line %d] in ", function->chunk.lines[instruction]);
+        if (function->name == NULL) {
+            fprintf(stderr, "script");
+        }
+        else {
+            fprintf(stderr, "%s()", function->name->chars);
+        }
+        fprintf(stderr, "\n");
+    }
+
     resetStack();
 }
 
@@ -53,6 +62,39 @@ void freeVM() {
 /// @returns The value at the distance from the top of the stack, 0 for the value at the top.
 static Value peek(int distance) {
     return vm.stackTop[-1 - distance];
+}
+
+/// @brief Gives the called function a frame.
+/// @returns Whether the call succeeded.
+static bool call(ObjFunction* function, int argCount) {
+    if (function->arity != argCount) {
+        runtimeError("Expected %d arguments but got %d.", function->arity, argCount);
+        return false;
+    }
+    if (vm.frameCount == FRAMES_MAX) {
+        runtimeError("Stack overflow.");
+        return false;
+    }
+
+    CallFrame* frame = &vm.frames[vm.frameCount++];
+    frame->function = function;
+    frame->ip = function->chunk.code;
+    frame->slots = vm.stackTop - argCount - 1;
+    return true;
+}
+/// @brief Checks if the callee is callable and calls it.
+/// @returns Whether the callee is callable.
+static bool callValue(Value callee, int argCount) {
+    if (IS_OBJ(callee)) {
+        switch (OBJ_TYPE(callee)) {
+            case OBJ_FUNCTION:
+                return call(AS_FUNCTION(callee), argCount);
+            default:
+                break;
+        }
+    }
+    runtimeError("Can only call functions and classes.");
+    return false;
 }
 
 /// @brief Sets the stack's top value to the given value. Primarily used for unary operators.
@@ -233,9 +275,25 @@ static InterpretResult run() {
                 frame->ip -= offset;
                 break;
             }
+            case OP_CALL: {
+                int argCount = READ_BYTE();
+                if (!callValue(peek(argCount), argCount)) {
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                frame = &vm.frames[vm.frameCount - 1];
+                break;
+            }
             case OP_RETURN:
-                // Exit interpreter
-                return INTERPRET_OK;
+                Value returnValue = pop();
+                --vm.frameCount;
+                if (vm.frameCount == 0) {
+                    pop();
+                    return INTERPRET_OK;
+                }
+                vm.stackTop = frame->slots;
+                push(returnValue);
+                frame = &vm.frames[vm.frameCount - 1];
+                break;
         }
     }
 }
@@ -257,6 +315,7 @@ InterpretResult interpret(const char* source) {
     frame->function = function;
     frame->ip = function->chunk.code;
     frame->slots = vm.stack;
+    call(function, 0);
 
     return run();
 }

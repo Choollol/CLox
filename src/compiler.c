@@ -160,6 +160,7 @@ static int emitJump(uint8_t instruction) {
 }
 /// @brief Appends a return instruction to the current chunk.
 static void emitReturn() {
+    emitByte(OP_NIL);
     emitByte(OP_RETURN);
 }
 
@@ -337,6 +338,22 @@ static void defineVariable(uint8_t global) {
 
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
+/// @brief Parses an argument list to a call.
+/// @returns The number of arguments.
+static uint8_t argumentList() {
+    uint8_t argCount = 0;
+    if (!check(TOKEN_RIGHT_PAREN)) {
+        do {
+            expression();
+            if (argCount == 255) {
+                error("Can't have more than 255 arguments.");
+            }
+            ++argCount;
+        } while (match(TOKEN_COMMA));
+    }
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after argument list.");
+    return argCount;
+}
 
 /// @brief Parses a logical AND expression.
 static void and_(bool canAssign) {
@@ -398,6 +415,12 @@ static void binary(bool canAssign) {
             emitByte(OP_DIVIDE);
             break;
     }
+}
+
+/// @brief Parses a call expression.
+static void call(bool canAssign) {
+    uint8_t argCount = argumentList();
+    emitBytes(OP_CALL, argCount);
 }
 
 /// @brief Parses a non-number literal expression.
@@ -482,7 +505,7 @@ static void unary(bool canAssign) {
 }
 
 ParseRule rules[] = {
-    [TOKEN_LEFT_PAREN] = {grouping, NULL, PREC_NONE},
+    [TOKEN_LEFT_PAREN] = {grouping, call, PREC_CALL},
     [TOKEN_RIGHT_PAREN] = {NULL, NULL, PREC_NONE},
     [TOKEN_LEFT_BRACE] = {NULL, NULL, PREC_NONE},
     [TOKEN_RIGHT_BRACE] = {NULL, NULL, PREC_NONE},

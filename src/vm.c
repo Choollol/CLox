@@ -157,7 +157,7 @@ static InterpretResult run() {
     while (true) {
 #ifdef DEBUG_TRACE_EXECUTION
         printStack();
-        disassembleInstruction(frame->function->chunk, /* (int) */ (frame->ip - frame->function->chunk.code));
+        disassembleInstruction(&frame->function->chunk, (int)(frame->ip - frame->function->chunk.code));
 #endif
         uint8_t instruction;
         switch (instruction = READ_BYTE()) {
@@ -311,10 +311,6 @@ InterpretResult interpret(const char* source) {
     }
 
     push(OBJ_VAL(function));
-    CallFrame* frame = &vm.frames[vm.frameCount++];
-    frame->function = function;
-    frame->ip = function->chunk.code;
-    frame->slots = vm.stack;
     call(function, 0);
 
     return run();

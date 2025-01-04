@@ -641,6 +641,22 @@ static void printStatement() {
     consume(TOKEN_SEMICOLON, "Expect ';' after print statement.");
     emitByte(OP_PRINT);
 }
+/// @brief Parses a return statement.
+static void returnStatement() {
+    if (current->type == TYPE_SCRIPT) {
+        error("Can't return from top-level code.");
+        return;
+    }
+
+    if (match(TOKEN_SEMICOLON)) {
+        emitReturn();
+    }
+    else {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+        emitByte(OP_RETURN);
+    }
+}
 /// @brief Parses a while loop.
 static void whileStatement() {
     int loopStart = currentChunk()->count;
@@ -753,6 +769,9 @@ static void statement() {
     }
     else if (match(TOKEN_IF)) {
         ifStatement();
+    }
+    else if (match(TOKEN_RETURN)) {
+        returnStatement();
     }
     else if (match(TOKEN_WHILE)) {
         whileStatement();

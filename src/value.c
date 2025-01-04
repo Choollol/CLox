@@ -59,5 +59,8 @@ void printValue(Value value) {
         case VAL_OBJ:
             printObject(value);
             break;
+        default:
+            printf("Unrecognized value type in printValue().");
+            break;
     }
 }

@@ -10,11 +10,15 @@
 
 /// @returns Whether the given value holds a function object.
 #define IS_FUNCTION(value) (isObjType(value, OBJ_FUNCTION))
+/// @returns Whether the given value holds a function object.
+#define IS_NATIVE(value) (isObjType(value, OBJ_NATIVE))
 /// @returns Whether the given value holds a string object.
 #define IS_STRING(value) (isObjType(value, OBJ_STRING))
 
 /// @returns The function object held by the given value.
 #define AS_FUNCTION(value) ((ObjFunction*)AS_OBJ(value))
+/// @returns The C function pointer from the native-function object held by the given value.
+#define AS_NATIVE(value) (((ObjNative*)AS_OBJ(value))->function)
 /// @returns The string object held by the given value.
 #define AS_STRING(value) ((ObjString*)AS_OBJ(value))
 /// @returns The null-terminated c-string in the string object held by the given value.
@@ -22,6 +26,7 @@
 
 typedef enum ObjType {
     OBJ_FUNCTION,
+    OBJ_NATIVE,
     OBJ_STRING,
 } ObjType;
 
@@ -37,6 +42,13 @@ typedef struct {
     ObjString* name;
 } ObjFunction;
 
+typedef Value (*NativeFn)(int argCount, Value* args);
+
+typedef struct {
+    Obj obj;
+    NativeFn function;
+} ObjNative;
+
 struct ObjString {
     Obj obj;
     int length;
@@ -46,6 +58,8 @@ struct ObjString {
 
 /// @brief Creates an empty-initialized function.
 ObjFunction* newFunction();
+/// @brief A constructor-like function for creating native functions.
+ObjNative* newNative(NativeFn function);
 
 /// @returns An ObjString* that takes ownership of the given chars.
 ObjString* takeString(char* chars, int length);

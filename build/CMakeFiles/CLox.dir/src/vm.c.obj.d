@@ -14,6 +14,10 @@ CMakeFiles/CLox.dir/src/vm.c.obj: C:/E/_VSCode_Projects/CLox/src/vm.c \
  C:/msys64/ucrt64/include/sec_api/stdio_s.h \
  C:/msys64/ucrt64/include/string.h C:/msys64/ucrt64/include/crtdefs.h \
  C:/msys64/ucrt64/include/sec_api/string_s.h \
+ C:/msys64/ucrt64/include/time.h C:/msys64/ucrt64/include/sys/timeb.h \
+ C:/msys64/ucrt64/include/sec_api/sys/timeb_s.h \
+ C:/msys64/ucrt64/include/_timeval.h \
+ C:/msys64/ucrt64/include/pthread_time.h \
  C:/E/_VSCode_Projects/CLox/include/common.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdbool.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \

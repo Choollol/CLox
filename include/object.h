@@ -33,6 +33,7 @@ typedef enum ObjType {
     OBJ_FUNCTION,
     OBJ_NATIVE,
     OBJ_STRING,
+    OBJ_UPVALUE,
 } ObjType;
 
 struct Obj {
@@ -43,6 +44,7 @@ struct Obj {
 typedef struct {
     Obj obj;
     int arity;
+    int upvalueCount;
     Chunk chunk;
     ObjString* name;
 } ObjFunction;
@@ -61,9 +63,18 @@ struct ObjString {
     uint32_t hash;
 };
 
+typedef struct ObjUpvalue {
+    Obj obj;
+    Value closed;
+    Value* location;
+    struct ObjUpvalue* next;
+} ObjUpvalue;
+
 typedef struct {
     Obj obj;
     ObjFunction* function;
+    ObjUpvalue** upvalues;
+    int upvalueCount;
 } ObjClosure;
 
 /// @brief Creates a closure object that closes over the given function object.
@@ -78,6 +89,8 @@ ObjNative* newNative(NativeFn function);
 ObjString* takeString(char* chars, int length);
 /// @brief Allocates a new string on the heap from the given string in the source code.
 ObjString* copyString(const char* chars, int length);
+/// @brief Constructor-like function for upvalue objects;
+ObjUpvalue* newUpvalue(Value* slot);
 /// @brief Prints a representation of an object value.
 void printObject(Value value);
 

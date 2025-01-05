@@ -60,7 +60,7 @@ void printValue(Value value) {
             printObject(value);
             break;
         default:
-            printf("Unrecognized value type in printValue().");
+            printf("Unrecognized value type in printValue(): %d", value.type);
             break;
     }
 }

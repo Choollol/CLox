@@ -96,6 +96,7 @@ CMakeFiles/CLox.dir/src/debug.c.obj: C:/E/_VSCode_Projects/CLox/src/debug.c \
   C:/E/_VSCode_Projects/CLox/include/chunk.h \
   C:/E/_VSCode_Projects/CLox/include/common.h \
   C:/E/_VSCode_Projects/CLox/include/debug.h \
+  C:/E/_VSCode_Projects/CLox/include/object.h \
   C:/E/_VSCode_Projects/CLox/include/value.h \
   C:/msys64/ucrt64/include/_mingw.h \
   C:/msys64/ucrt64/include/_mingw_mac.h \

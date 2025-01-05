@@ -259,6 +259,10 @@ Token scanToken() {
             return makeToken(TOKEN_SLASH);
         case '*':
             return makeToken(TOKEN_STAR);
+        case '?':
+            return makeToken(TOKEN_QUESTION);
+        case ':':
+            return makeToken(TOKEN_COLON);
 
         // Possibly double-character tokens
         case '!':

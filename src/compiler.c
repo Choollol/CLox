@@ -8,7 +8,6 @@
 #include "../include/object.h"
 #include "../include/scanner.h"
 
-
 #ifdef DEBUG_PRINT_CODE
 #include "../include/debug.h"
 #endif
@@ -22,15 +21,16 @@ typedef struct {
 
 typedef enum {
     PREC_NONE,
-    PREC_ASSIGNMENT,  // =
-    PREC_OR,          // or
-    PREC_AND,         // and
-    PREC_EQUALITY,    // == !=
-    PREC_COMPARISON,  // < > <= >=
-    PREC_TERM,        // + -
-    PREC_FACTOR,      // * /
-    PREC_UNARY,       // ! -
-    PREC_CALL,        // . ()
+    PREC_ASSIGNMENT,   // =
+    PREC_CONDITIONAL,  // ?:
+    PREC_OR,           // or
+    PREC_AND,          // and
+    PREC_EQUALITY,     // == !=
+    PREC_COMPARISON,   // < > <= >=
+    PREC_TERM,         // + -
+    PREC_FACTOR,       // * /
+    PREC_UNARY,        // ! -
+    PREC_CALL,         // . ()
     PREC_PRIMARY
 } Precedence;
 
@@ -475,6 +475,22 @@ static void binary(bool canAssign) {
     }
 }
 
+/// @brief Parses a conditional (ternary) expression.
+static void conditional(bool canAssign) {
+    int elseJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+
+    parsePrecedence(PREC_CONDITIONAL + 1);
+    int thenJump = emitJump(OP_JUMP);
+
+    consume(TOKEN_COLON, "Expect ':' in conditional expression.");
+
+    patchJump(elseJump);
+    emitByte(OP_POP);
+    parsePrecedence(PREC_CONDITIONAL + 1);
+    patchJump(thenJump);
+}
+
 /// @brief Parses a call expression.
 static void call(bool canAssign) {
     uint8_t argCount = argumentList();
@@ -606,6 +622,8 @@ ParseRule rules[] = {
     [TOKEN_VAR] = {NULL, NULL, PREC_NONE},
     [TOKEN_WHILE] = {NULL, NULL, PREC_NONE},
     [TOKEN_ERROR] = {NULL, NULL, PREC_NONE},
+    [TOKEN_QUESTION] = {NULL, conditional, PREC_CONDITIONAL},
+    [TOKEN_COLON] = {NULL, NULL, PREC_NONE},
     [TOKEN_EOF] = {NULL, NULL, PREC_NONE},
 };
 
@@ -702,6 +720,7 @@ static void ifStatement() {
 
     patchJump(elseJump);
 }
+
 /// @brief Parses a print statement. Assumes the print token has already been consumed.
 static void printStatement() {
     expression();

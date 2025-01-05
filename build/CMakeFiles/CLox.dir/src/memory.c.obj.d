@@ -31,5 +31,4 @@ CMakeFiles/CLox.dir/src/memory.c.obj: \
  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
  C:/msys64/ucrt64/include/_mingw_off_t.h \
  C:/msys64/ucrt64/include/swprintf.inl \
- C:/msys64/ucrt64/include/sec_api/stdio_s.h \
- C:/E/_VSCode_Projects/CLox/include/debug.h
+ C:/msys64/ucrt64/include/sec_api/stdio_s.h

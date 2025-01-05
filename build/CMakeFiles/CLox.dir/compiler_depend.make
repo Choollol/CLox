@@ -43,7 +43,9 @@ CMakeFiles/CLox.dir/src/chunk.c.obj: C:/E/_VSCode_Projects/CLox/src/chunk.c \
   C:/E/_VSCode_Projects/CLox/include/common.h \
   C:/E/_VSCode_Projects/CLox/include/memory.h \
   C:/E/_VSCode_Projects/CLox/include/object.h \
+  C:/E/_VSCode_Projects/CLox/include/table.h \
   C:/E/_VSCode_Projects/CLox/include/value.h \
+  C:/E/_VSCode_Projects/CLox/include/vm.h \
   C:/msys64/ucrt64/include/_mingw.h \
   C:/msys64/ucrt64/include/_mingw_mac.h \
   C:/msys64/ucrt64/include/_mingw_secapi.h \
@@ -122,7 +124,6 @@ CMakeFiles/CLox.dir/src/memory.c.obj: C:/E/_VSCode_Projects/CLox/src/memory.c \
   C:/E/_VSCode_Projects/CLox/include/chunk.h \
   C:/E/_VSCode_Projects/CLox/include/common.h \
   C:/E/_VSCode_Projects/CLox/include/compiler.h \
-  C:/E/_VSCode_Projects/CLox/include/debug.h \
   C:/E/_VSCode_Projects/CLox/include/memory.h \
   C:/E/_VSCode_Projects/CLox/include/object.h \
   C:/E/_VSCode_Projects/CLox/include/table.h \

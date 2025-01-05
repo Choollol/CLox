@@ -52,7 +52,7 @@ typedef enum FunctionType {
 
 typedef struct Compiler {
     struct Compiler* enclosing;
-    
+
     ObjFunction* function;
     FunctionType type;
 
@@ -582,7 +582,7 @@ static void function(FunctionType type) {
     block();
 
     ObjFunction* function = endCompiler();
-    emitBytes(OP_CONSTANT, makeConstant(OBJ_VAL(function)));
+    emitBytes(OP_CLOSURE, makeConstant(OBJ_VAL(function)));
 }
 /// @brief Parses a function declaration. Assums the fun token has already been consumed.
 static void funDeclaration() {

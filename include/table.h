@@ -33,6 +33,11 @@ void tableAddAll(Table* from, Table* to);
 /// @brief Finds an entry whose key contains the given string.
 ObjString* tableFindString(Table* table, const char* chars, int length, uint32_t hash);
 
+/// @brief Deletes unmarked entries from the given table.
+void tableRemoveWhite(Table* table);
+/// @brief GC-Marks all keys and values in a table as reachable.
+void markTable(Table* table);
+
 /// @brief Debug prints a table.
 void printTable(Table* table);
 

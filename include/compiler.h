@@ -8,4 +8,7 @@
 /// @returns A function that contains the top-level code. If a compile-time error occurred, returns NULL.
 ObjFunction* compile(const char* source);
 
+/// @brief GC-marks the compiler's roots as reachable.
+void markCompilerRoots();
+
 #endif

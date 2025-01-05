@@ -117,7 +117,7 @@ bool tableDelete(Table* table, ObjString* key) {
     }
 
     Entry* entry = findEntry(table->entries, table->capacity, key);
-    if (entry == NULL) {
+    if (entry->key == NULL) {
         return false;
     }
 
@@ -153,6 +153,22 @@ ObjString* tableFindString(Table* table, const char* chars, int length, uint32_t
             return entry->key;
         }
         index = (index + 1) % table->capacity;
+    }
+}
+
+void tableRemoveWhite(Table* table) {
+    for (int i = 0; i < table->capacity; ++i) {
+        Entry* entry = &table->entries[i];
+        if (entry->key != NULL && !entry->key->obj.isMarked) {
+            tableDelete(table, entry->key);
+        }
+    }
+}
+void markTable(Table* table) {
+    for (int i = 0; i < table->capacity; ++i) {
+        Entry* entry = &table->entries[i];
+        markObject((Obj*)entry->key);
+        markValue(entry->value);
     }
 }
 

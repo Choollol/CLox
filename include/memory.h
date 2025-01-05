@@ -2,6 +2,7 @@
 #define CLOX_INCLUDE_MEMORY_H
 
 #include "common.h"
+#include "object.h"
 
 /// @brief Allocates new memory.
 #define ALLOCATE(type, count) ((type*)reallocate(NULL, 0, sizeof(type) * count))
@@ -21,6 +22,13 @@
 /// @param newSize If 0, free allocation. Otherwise, resize.
 /// @return Pointer that points to the newly allocated block.
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+
+/// @brief GC-Marks an object as reachable.
+void markObject(Obj* object);
+/// @brief GC-Marks a value on the VM's stack as reachable.
+void markValue(Value value);
+/// @brief Triggers the garbage collector.
+void collectGarbage();
 
 /// @brief Frees the VM's linked list of objects.
 void freeObjects();

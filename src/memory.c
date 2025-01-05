@@ -1,11 +1,33 @@
 #include <stdlib.h>
 
+#include "../include/compiler.h"
 #include "../include/memory.h"
 #include "../include/object.h"
 #include "../include/vm.h"
 
+#ifdef DEBUG_LOG_GC
+#include <stdio.h>
+
+#include "../include/debug.h"
+
+#endif
+#ifdef DEBUG_PRINT
+#include <stdio.h>
+#endif
+
+#define GC_HEAP_GROW_FACTOR 2
 
 void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
+    vm.bytesAllocated += newSize - oldSize;
+    if (newSize > oldSize) {
+#ifdef DEBUG_STRESS_GC
+        collectGarbage();
+#endif
+        if (vm.bytesAllocated > vm.nextGC) {
+            collectGarbage();
+        }
+    }
+
     if (newSize == 0) {
         free(pointer);
         return NULL;
@@ -19,8 +41,75 @@ void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
     return result;
 }
 
+void markObject(Obj* object) {
+    if (object == NULL || object->isMarked) {
+        return;
+    }
+#ifdef DEBUG_LOG_GC
+    printf("%p mark ", (void*)object);
+    printValue(OBJ_VAL(object));
+    printf("\n");
+#endif
+
+    object->isMarked = true;
+
+    if (vm.grayCapacity < vm.grayCount + 1) {
+        vm.grayCapacity = GROW_CAPACITY(vm.grayCapacity);
+        vm.grayStack = (Obj**)realloc(vm.grayStack, sizeof(Obj*) * vm.grayCapacity);
+        if (vm.grayStack == NULL) {
+            exit(1);
+        }
+    }
+    vm.grayStack[vm.grayCount++] = object;
+}
+void markValue(Value value) {
+    if (IS_OBJ(value)) {
+        markObject(AS_OBJ(value));
+    }
+}
+/// @brief GC-marks the values in a ValueArray as reachable.
+static void markArray(ValueArray* array) {
+    for (int i = 0; i < array->count; ++i) {
+        markValue(array->values[i]);
+    }
+}
+
+/// @brief GC-marks all of an object's references as reachable.
+static void blackenObject(Obj* object) {
+#ifdef DEBUG_LOG_GC
+    printf("%p blacken ", (void*)object);
+    printValue(OBJ_VAL(object));
+    printf("\n");
+#endif
+    switch (object->type) {
+        case OBJ_CLOSURE: {
+            ObjClosure* closure = (ObjClosure*)object;
+            markObject((Obj*)closure->function);
+            for (int i = 0; i < closure->upvalueCount; ++i) {
+                markObject((Obj*)closure->upvalues[i]);
+            }
+            break;
+        }
+        case OBJ_FUNCTION: {
+            ObjFunction* function = (ObjFunction*)object;
+            markObject((Obj*)function->name);
+            markArray(&function->chunk.constants);
+            break;
+        }
+        case OBJ_UPVALUE:
+            markValue(((ObjUpvalue*)object)->closed);
+            break;
+        case OBJ_STRING:
+        case OBJ_NATIVE:
+            break;
+    }
+}
+
 /// @brief Frees an object and any of its members that need freeing.
 static void freeObject(Obj* object) {
+#ifdef DEBUG_LOG_GC
+    printf("%p free type %d\n", (void*)object, object->type);
+#endif
     switch (object->type) {
         case OBJ_CLOSURE:
             ObjClosure* closure = (ObjClosure*)object;
@@ -47,6 +136,76 @@ static void freeObject(Obj* object) {
             break;
     }
 }
+/// @brief GC-marks roots, directly reachable objects, in the garbage collection process.
+static void markRoots() {
+    for (Value* slot = vm.stack; slot < vm.stackTop; ++slot) {
+        markValue(*slot);
+    }
+
+    for (int i = 0; i < vm.frameCount; ++i) {
+        markObject((Obj*)vm.frames[i].closure);
+    }
+
+    for (ObjUpvalue* upvalue = vm.openUpvalues; upvalue != NULL; upvalue = upvalue->next) {
+        markObject((Obj*)upvalue);
+    }
+
+    printTable(&vm.globals);
+    markTable(&vm.globals);
+    markCompilerRoots();
+}
+
+/// @brief GC-marks gray objects' references, i.e. marks indirectly reachable objects.
+void traceReferences() {
+    while (vm.grayCount > 0) {
+        Obj* object = vm.grayStack[--vm.grayCount];
+        blackenObject(object);
+    }
+}
+
+/// @brief Frees unmarked objects.
+void sweep() {
+    Obj* previous = NULL;
+    Obj* object = vm.objects;
+    while (object != NULL) {
+        if (object->isMarked) {
+            object->isMarked = false;
+            previous = object;
+            object = object->next;
+        }
+        else {
+            Obj* unreached = object;
+            object = object->next;
+            if (previous != NULL) {
+                previous->next = object;
+            }
+            else {
+                vm.objects = object;
+            }
+            freeObject(unreached);
+        }
+    }
+}
+
+void collectGarbage() {
+#ifdef DEBUG_LOG_GC
+    printf("-- gc begin\n");
+    size_t before = vm.bytesAllocated;
+#endif
+
+    markRoots();
+    traceReferences();
+    // Prevent dangling pointers
+    tableRemoveWhite(&vm.strings);
+    sweep();
+
+    vm.nextGC = vm.bytesAllocated * GC_HEAP_GROW_FACTOR;
+
+#ifdef DEBUG_LOG_GC
+    printf("-- gc end\n");
+    printf("   collected %zu bytes (from %zu to %zu) next at %zu\n", before - vm.bytesAllocated, before, vm.bytesAllocated, vm.nextGC);
+#endif
+}
 
 void freeObjects() {
     Obj* object = vm.objects;
@@ -55,4 +214,5 @@ void freeObjects() {
         freeObject(object);
         object = next;
     }
+    free(vm.grayStack);
 }

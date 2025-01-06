@@ -23,11 +23,10 @@ CMakeFiles/CLox.dir/src/memory.c.obj: \
  C:/msys64/ucrt64/include/stdint.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
  C:/E/_VSCode_Projects/CLox/include/object.h \
+ C:/E/_VSCode_Projects/CLox/include/table.h \
  C:/E/_VSCode_Projects/CLox/include/memory.h \
  C:/E/_VSCode_Projects/CLox/include/object.h \
- C:/E/_VSCode_Projects/CLox/include/vm.h \
- C:/E/_VSCode_Projects/CLox/include/table.h \
- C:/msys64/ucrt64/include/stdio.h \
+ C:/E/_VSCode_Projects/CLox/include/vm.h C:/msys64/ucrt64/include/stdio.h \
  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
  C:/msys64/ucrt64/include/_mingw_off_t.h \
  C:/msys64/ucrt64/include/swprintf.inl \

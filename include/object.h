@@ -4,6 +4,7 @@
 #include "chunk.h"
 #include "common.h"
 #include "value.h"
+#include "table.h"
 
 
 /// @returns The ObjType of the object held by the given value.
@@ -15,17 +16,21 @@
 #define IS_CLOSURE(value) (isObjType(value, OBJ_CLOSURE))
 /// @returns Whether the given Value holds a function object.
 #define IS_FUNCTION(value) (isObjType(value, OBJ_FUNCTION))
+/// @returns Whether the given Value holds an instance object.
+#define IS_INSTANCE(value) (isObjType(value, OBJ_INSTANCE))
 /// @returns Whether the given Value holds a function object.
 #define IS_NATIVE(value) (isObjType(value, OBJ_NATIVE))
 /// @returns Whether the given Value holds a string object.
 #define IS_STRING(value) (isObjType(value, OBJ_STRING))
 
-/// @returns The class object held by the given value.
+/// @returns The class object held by the given Value.
 #define AS_CLASS(value) ((ObjClass*)AS_OBJ(value))
 /// @returns The closure object held by the given Value.
 #define AS_CLOSURE(value) ((ObjClosure*)AS_OBJ(value))
 /// @returns The function object held by the given Value.
 #define AS_FUNCTION(value) ((ObjFunction*)AS_OBJ(value))
+/// @returns The instance object held by the given Value.
+#define AS_INSTANCE(value) ((ObjInstance*)AS_OBJ(value))
 /// @returns The C function pointer from the native-function object held by the given Value.
 #define AS_NATIVE(value) (((ObjNative*)AS_OBJ(value))->function)
 /// @returns The string object held by the given Value.
@@ -37,6 +42,7 @@ typedef enum ObjType {
     OBJ_CLASS,
     OBJ_CLOSURE,
     OBJ_FUNCTION,
+    OBJ_INSTANCE,
     OBJ_NATIVE,
     OBJ_STRING,
     OBJ_UPVALUE,
@@ -89,12 +95,20 @@ typedef struct {
     ObjString* name;
 } ObjClass;
 
+typedef struct {
+    Obj obj;
+    ObjClass* loxClass;
+    Table fields;
+} ObjInstance;
+
 /// @brief Constructor-like for class objects.
 ObjClass* newClass(ObjString* name);
 /// @brief Creates a closure object that closes over the given function object.
 ObjClosure* newClosure(ObjFunction* function);
 /// @brief Creates an empty-initialized function.
 ObjFunction* newFunction();
+/// @brief Constructor-like for instance objects.
+ObjInstance* newInstance(ObjClass* loxClass);
 /// @brief A constructor-like function for creating native functions.
 ObjNative* newNative(NativeFn function);
 

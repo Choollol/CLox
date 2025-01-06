@@ -6,7 +6,6 @@
 #include "../include/table.h"
 #include "../include/vm.h"
 
-
 /// @brief Allocates an object on the heap, a sort of constructor.
 /// @returns An Obj* to the allocated object.
 #define ALLOCATE_OBJ(type, objectType) ((type*)allocateObject(sizeof(type), objectType))
@@ -51,6 +50,12 @@ ObjFunction* newFunction() {
     function->name = NULL;
     initChunk(&function->chunk);
     return function;
+}
+ObjInstance* newInstance(ObjClass* loxClass) {
+    ObjInstance* instance = ALLOCATE_OBJ(ObjInstance, OBJ_INSTANCE);
+    instance->loxClass = loxClass;
+    initTable(&instance->fields);
+    return instance;
 }
 ObjNative* newNative(NativeFn function) {
     ObjNative* native = ALLOCATE_OBJ(ObjNative, OBJ_NATIVE);
@@ -134,6 +139,9 @@ void printObject(Value value) {
             break;
         case OBJ_FUNCTION:
             printFunction(AS_FUNCTION(value));
+            break;
+        case OBJ_INSTANCE:
+            printf("%s instance", AS_INSTANCE(value)->loxClass->name->chars);
             break;
         case OBJ_NATIVE:
             printf("<native fn>");

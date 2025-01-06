@@ -21,7 +21,7 @@ CMakeFiles/CLox.dir/src/object.c.obj: \
  C:/E/_VSCode_Projects/CLox/include/object.h \
  C:/E/_VSCode_Projects/CLox/include/chunk.h \
  C:/E/_VSCode_Projects/CLox/include/value.h \
+ C:/E/_VSCode_Projects/CLox/include/table.h \
  C:/E/_VSCode_Projects/CLox/include/object.h \
  C:/E/_VSCode_Projects/CLox/include/table.h \
- C:/E/_VSCode_Projects/CLox/include/vm.h \
- C:/E/_VSCode_Projects/CLox/include/table.h
+ C:/E/_VSCode_Projects/CLox/include/vm.h

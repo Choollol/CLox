@@ -66,6 +66,7 @@ CMakeFiles/CLox.dir/src/compiler.c.obj: C:/E/_VSCode_Projects/CLox/src/compiler.
   C:/E/_VSCode_Projects/CLox/include/memory.h \
   C:/E/_VSCode_Projects/CLox/include/object.h \
   C:/E/_VSCode_Projects/CLox/include/scanner.h \
+  C:/E/_VSCode_Projects/CLox/include/table.h \
   C:/E/_VSCode_Projects/CLox/include/value.h \
   C:/msys64/ucrt64/include/_mingw.h \
   C:/msys64/ucrt64/include/_mingw_mac.h \
@@ -101,6 +102,7 @@ CMakeFiles/CLox.dir/src/debug.c.obj: C:/E/_VSCode_Projects/CLox/src/debug.c \
   C:/E/_VSCode_Projects/CLox/include/common.h \
   C:/E/_VSCode_Projects/CLox/include/debug.h \
   C:/E/_VSCode_Projects/CLox/include/object.h \
+  C:/E/_VSCode_Projects/CLox/include/table.h \
   C:/E/_VSCode_Projects/CLox/include/value.h \
   C:/msys64/ucrt64/include/_mingw.h \
   C:/msys64/ucrt64/include/_mingw_mac.h \
@@ -249,6 +251,7 @@ CMakeFiles/CLox.dir/src/value.c.obj: C:/E/_VSCode_Projects/CLox/src/value.c \
   C:/E/_VSCode_Projects/CLox/include/common.h \
   C:/E/_VSCode_Projects/CLox/include/memory.h \
   C:/E/_VSCode_Projects/CLox/include/object.h \
+  C:/E/_VSCode_Projects/CLox/include/table.h \
   C:/E/_VSCode_Projects/CLox/include/value.h \
   C:/msys64/ucrt64/include/_mingw.h \
   C:/msys64/ucrt64/include/_mingw_mac.h \

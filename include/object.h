@@ -10,6 +10,8 @@
 /// @returns The ObjType of the object held by the given value.
 #define OBJ_TYPE(value) (AS_OBJ(value)->type)
 
+/// @returns Whether the given Value holds a bound method object.
+#define IS_BOUND_METHOD(value) (isObjType(value, OBJ_BOUND_METHOD))
 /// @returns Whether the given Value holds a class object.
 #define IS_CLASS(value) (isObjType(value, OBJ_CLASS))
 /// @returns Whether the given Value holds a closure object.
@@ -23,6 +25,8 @@
 /// @returns Whether the given Value holds a string object.
 #define IS_STRING(value) (isObjType(value, OBJ_STRING))
 
+/// @returns The bount method object held by the given Value.
+#define AS_BOUND_METHOD(value) ((ObjBoundMethod*)AS_OBJ(value))
 /// @returns The class object held by the given Value.
 #define AS_CLASS(value) ((ObjClass*)AS_OBJ(value))
 /// @returns The closure object held by the given Value.
@@ -39,6 +43,7 @@
 #define AS_CSTRING(value) (AS_STRING(value)->chars)
 
 typedef enum ObjType {
+    OBJ_BOUND_METHOD,
     OBJ_CLASS,
     OBJ_CLOSURE,
     OBJ_FUNCTION,
@@ -102,6 +107,14 @@ typedef struct {
     Table fields;
 } ObjInstance;
 
+typedef struct {
+    Obj obj;
+    Value receiver;
+    ObjClosure* method;
+} ObjBoundMethod;
+
+/// @brief Constructor-like for bound method objects.
+ObjBoundMethod* newBoundMethod(Value receiver, ObjClosure* method);
 /// @brief Constructor-like for class objects.
 ObjClass* newClass(ObjString* name);
 /// @brief Creates a closure object that closes over the given function object.

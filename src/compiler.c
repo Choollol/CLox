@@ -683,17 +683,36 @@ static void function(FunctionType type) {
         emitByte(compiler.upvalues[i].index);
     }
 }
+
+/// @brief Parses a method.
+static void method() {
+    consume(TOKEN_IDENTIFIER, "Expect method name.");
+    uint8_t constant = identifierConstant(&parser.previous);
+
+    FunctionType type = TYPE_FUNCTION;
+    function(type);
+
+    emitBytes(OP_METHOD, constant);
+}
 /// @brief Parses a class declaration.
 static void classDeclaration() {
     consume(TOKEN_IDENTIFIER, "Expect class name.");
+    Token className = parser.previous;
     uint8_t nameConstant = identifierConstant(&parser.previous);
     declareVariable();
 
     emitBytes(OP_CLASS, nameConstant);
     defineVariable(nameConstant);
 
+    namedVariable(className, false);
     consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
+
+    while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+        method();
+    }
+
     consume(TOKEN_RIGHT_BRACE, "Expect '}' before class body.");
+    emitByte(OP_POP);
 }
 /// @brief Parses a function declaration. Assums the fun token has already been consumed.
 static void funDeclaration() {

@@ -168,6 +168,14 @@ static void closeUpvalues(Value* last) {
     }
 }
 
+/// @brief Defines a method.
+static void defineMethod(ObjString* name) {
+    Value method = peek(0);
+    ObjClass* loxClass = AS_CLASS(peek(1));
+    tableSet(&loxClass->methods, name, method);
+    pop();
+}
+
 /// @brief Sets the stack's top value to the given value. Primarily used for unary operators.
 static void setTopValue(Value value) {
     vm.stackTop[-1] = value;
@@ -438,6 +446,9 @@ static InterpretResult run() {
                 push(OBJ_VAL(newClass(READ_STRING())));
                 break;
             }
+            case OP_METHOD:
+                defineMethod(READ_STRING());
+                break;
         }
     }
 }

@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 #include "../include/debug.h"
-#include "../include/value.h"
 #include "../include/object.h"
+#include "../include/value.h"
 
 /// @brief Outputs a representation of a constant instruction and its corresponding value.
 static int constantInstruction(const char* name, Chunk* chunk, int offset) {
@@ -11,6 +11,15 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
     printValue(chunk->constants.values[constantIndex]);
     printf("'\n");
     return offset + 2;
+}
+/// @brief Outputs a representation of an invoke instruction.
+static int invokeInstruction(const char* name, Chunk* chunk, int offset) {
+    uint8_t constant = chunk->code[offset + 1];
+    uint8_t argCount = chunk->code[offset + 2];
+    printf("%-16s (%d args) %4d '", name, argCount, constant);
+    printValue(chunk->constants.values[constant]);
+    printf("'\n");
+    return offset + 3;
 }
 /// @brief Outputs a representation of a simple, one-byte instruction.
 static int simpleInstruction(const char* name, int offset) {
@@ -82,6 +91,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return constantInstruction("OP_GET_PROPERTY", chunk, offset);
         case OP_SET_PROPERTY:
             return constantInstruction("OP_SET_PROPERTY", chunk, offset);
+        case OP_GET_SUPER:
+            return constantInstruction("OP_GET_SUPER", chunk, offset);
         case OP_EQUAL:
             return simpleInstruction("OP_EQUAL", offset);
         case OP_GREATER:
@@ -110,6 +121,10 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return jumpInstruction("OP_LOOP", -1, chunk, offset);
         case OP_CALL:
             return byteInstruction("OP_CALL", chunk, offset);
+        case OP_INVOKE:
+            return invokeInstruction("OP_INVOKE", chunk, offset);
+        case OP_SUPER_INVOKE:
+            return invokeInstruction("OP_SUPER_INVOKE", chunk, offset);
         case OP_CLOSURE: {
             ++offset;
             uint8_t constant = chunk->code[offset++];
@@ -132,7 +147,9 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return simpleInstruction("OP_RETURN", offset);
         case OP_CLASS:
             return constantInstruction("OP_CLASS", chunk, offset);
-        case OP_METHOD: 
+        case OP_INHERIT:
+            return simpleInstruction("OP_INHERIT", offset);
+        case OP_METHOD:
             return constantInstruction("OP_METHOD", chunk, offset);
         default:
             printf("Unknown opcode %d", instruction);

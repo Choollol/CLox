@@ -186,6 +186,7 @@ static void markRoots() {
     printTable(&vm.globals);
     markTable(&vm.globals);
     markCompilerRoots();
+    markObject((Obj*)vm.initString);
 }
 
 /// @brief GC-marks gray objects' references, i.e. marks indirectly reachable objects.

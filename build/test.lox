@@ -1,8 +1,2 @@
-fun oneOrTwo(truth) {
-  print truth ? 1 : 2;
-}
-
-oneOrTwo(1);
-oneOrTwo(false);
-oneOrTwo(true);
-oneOrTwo(nil);
+class Brioche {}
+print Brioche;

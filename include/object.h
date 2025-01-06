@@ -1,13 +1,16 @@
 #ifndef CLOX_INCLUDE_OBJECT_H
 #define CLOX_INCLUDE_OBJECT_H
 
+#include "chunk.h"
 #include "common.h"
 #include "value.h"
-#include "chunk.h"
+
 
 /// @returns The ObjType of the object held by the given value.
 #define OBJ_TYPE(value) (AS_OBJ(value)->type)
 
+/// @returns Whether the given Value holds a class object.
+#define IS_CLASS(value) (isObjType(value, OBJ_CLASS))
 /// @returns Whether the given Value holds a closure object.
 #define IS_CLOSURE(value) (isObjType(value, OBJ_CLOSURE))
 /// @returns Whether the given Value holds a function object.
@@ -17,6 +20,8 @@
 /// @returns Whether the given Value holds a string object.
 #define IS_STRING(value) (isObjType(value, OBJ_STRING))
 
+/// @returns The class object held by the given value.
+#define AS_CLASS(value) ((ObjClass*)AS_OBJ(value))
 /// @returns The closure object held by the given Value.
 #define AS_CLOSURE(value) ((ObjClosure*)AS_OBJ(value))
 /// @returns The function object held by the given Value.
@@ -29,6 +34,7 @@
 #define AS_CSTRING(value) (AS_STRING(value)->chars)
 
 typedef enum ObjType {
+    OBJ_CLASS,
     OBJ_CLOSURE,
     OBJ_FUNCTION,
     OBJ_NATIVE,
@@ -78,9 +84,15 @@ typedef struct {
     int upvalueCount;
 } ObjClosure;
 
+typedef struct {
+    Obj obj;
+    ObjString* name;
+} ObjClass;
+
+/// @brief Constructor-like for class objects.
+ObjClass* newClass(ObjString* name);
 /// @brief Creates a closure object that closes over the given function object.
 ObjClosure* newClosure(ObjFunction* function);
-
 /// @brief Creates an empty-initialized function.
 ObjFunction* newFunction();
 /// @brief A constructor-like function for creating native functions.

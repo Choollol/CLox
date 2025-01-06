@@ -45,6 +45,8 @@ typedef enum OpCode {
     OP_CLOSE_UPVALUE,
 
     OP_RETURN,
+
+    OP_CLASS,
 } OpCode;
 
 // Dynamic array

@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-//#define NAN_BOXING
+#define NAN_BOXING
 
 #define DEBUG_PRINT
 //#define DEBUG_PRINT_CODE

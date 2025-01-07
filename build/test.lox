@@ -3,9 +3,17 @@ class Doughnut {
     print "Dunk in the fryer.";
   }
 }
-
 class Cruller < Doughnut {
+  init(size) {
+    this.size = size;
+  }
   finish() {
     print "Glaze with icing.";
   }
+  output() {
+    super.cook();
+    print this.size;
+  }
 }
+var cruller = Cruller(10);
+cruller.output();

@@ -26,7 +26,7 @@ void freeTable(Table* table) {
 
 /// @returns If found, the entry with the given key. Otherwise, an entry whose key is NULL and is suitable for insertion.
 static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
-    uint32_t index = key->hash % capacity;
+    uint32_t index = key->hash & (capacity - 1);
     Entry* tombstone = NULL;
 
     while (true) {
@@ -49,7 +49,7 @@ static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
             return entry;
         }
 
-        index = (index + 1) % capacity;
+        index = (index + 1) & (capacity - 1);
     }
 }
 
@@ -129,7 +129,7 @@ bool tableDelete(Table* table, ObjString* key) {
 void tableAddAll(Table* from, Table* to) {
     for (int i = 0; i < from->capacity; ++i) {
         Entry* entry = &from->entries[i];
-        if (entry != NULL) {
+        if (entry->key != NULL) {
             tableSet(to, entry->key, entry->value);
         }
     }
@@ -140,7 +140,7 @@ ObjString* tableFindString(Table* table, const char* chars, int length, uint32_t
         return NULL;
     }
 
-    uint32_t index = hash % table->capacity;
+    uint32_t index = hash & (table->capacity - 1);
     while (true) {
         Entry* entry = &table->entries[index];
         if (entry->key == NULL) {
@@ -152,7 +152,7 @@ ObjString* tableFindString(Table* table, const char* chars, int length, uint32_t
         else if (entry->key->length == length && entry->key->hash == hash && memcmp(entry->key->chars, chars, length) == 0) {
             return entry->key;
         }
-        index = (index + 1) % table->capacity;
+        index = (index + 1) & (table->capacity - 1);
     }
 }
 
